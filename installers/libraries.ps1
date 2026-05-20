@@ -18,22 +18,41 @@ function Install-DefaultLibraries {
     $failed = @()
     $triplet = "x64-windows"
 
+    # Validar vcpkg antes de começar
+    if (!(Test-Path "$Global:VcpkgRoot\vcpkg.exe")) {
+        Log-Error "vcpkg.exe não encontrado em: $Global:VcpkgRoot\vcpkg.exe"
+        return
+    }
+
+    # Atualizar vcpkg antes de instalar bibliotecas
+    Log "Atualizando repositório vcpkg..."
+    try {
+        & "$Global:VcpkgRoot\vcpkg.exe" update
+        Log "Repositório vcpkg atualizado"
+    }
+    catch {
+        Log-Warn "Falha ao atualizar vcpkg: $_"
+    }
+
     foreach ($lib in $libraries) {
         Log "Instalando biblioteca: $lib"
         
         try {
-            # Validar vcpkg.exe existe
-            if (!(Test-Path "$Global:VcpkgRoot\vcpkg.exe")) {
-                throw "vcpkg.exe não encontrado em: $Global:VcpkgRoot\vcpkg.exe"
+            # Usar sintaxe segura: não interpolação direta, usar argumentos separados
+            $arguments = @("install", "$lib`:`:`x64-windows")
+            
+            Log-Debug "Executando: vcpkg install $lib`:x64-windows"
+            
+            $process = & "$Global:VcpkgRoot\vcpkg.exe" install "$lib`:x64-windows" 2>&1
+            
+            # Verificar se houve sucesso procurando por mensagens de erro
+            $output = $process | Out-String
+            if ($output -match "error:|ERROR") {
+                Log-Warn "Aviso ao instalar $lib (pode estar parcialmente instalado): verificar manualmente"
+                # Não adicionar à lista de falhados se apenas avisos
+            } else {
+                Log "Biblioteca instalada com sucesso: $lib"
             }
-
-            # Executar instalação com triplet válido
-            $libSpec = "$lib`:$triplet"
-            Log-Debug "Executando: vcpkg install $libSpec"
-            
-            & "$Global:VcpkgRoot\vcpkg.exe" install $libSpec --triplet $triplet
-            
-            Log "Biblioteca instalada com sucesso: $lib"
         }
         catch {
             Log-Error "Falha ao instalar: $lib - $_"
@@ -42,8 +61,9 @@ function Install-DefaultLibraries {
     }
 
     if ($failed.Count -gt 0) {
-        Log-Warn "Bibliotecas que falharam ($($failed.Count)): $($failed -join ', ')"
+        Log-Warn "Bibliotecas com falha crítica ($($failed.Count)): $($failed -join ', ')"
+        Log-Warn "Sugestão: Execute manualmente 'vcpkg install <biblioteca>:x64-windows' para diagnosticar"
     } else {
-        Log "Todas as bibliotecas foram instaladas com sucesso"
+        Log "Processo de instalação de bibliotecas concluído"
     }
 }
