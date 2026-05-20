@@ -1,0 +1,24 @@
+{
+  "packages": [
+    {
+      "name": "git",
+      "winget": "Git.Git"
+    },
+    {
+      "name": "python",
+      "winget": "Python.Python.3.12"
+    },
+    {
+      "name": "node",
+      "winget": "OpenJS.NodeJS.LTS"
+    },
+    {
+      "name": "cmake",
+      "winget": "Kitware.CMake"
+    },
+    {
+      "name": "llvm",
+      "winget": "LLVM.LLVM"
+    }
+  ]
+}
