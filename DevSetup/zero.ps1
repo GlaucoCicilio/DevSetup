@@ -1,5 +1,5 @@
 # zero.ps1
-# 2026-05-19
+# 2026-05-20
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
@@ -23,15 +23,26 @@ if (!(Get-Command winget -ErrorAction SilentlyContinue)) {
     throw "WinGet não encontrado."
 }
 
+# ✅ Corrigido - Adicionar ao PATH da máquina permanentemente
 if (!(Get-Command pwsh -ErrorAction SilentlyContinue)) {
-
     winget install `
         --id Microsoft.PowerShell `
         -e `
         --silent `
         --accept-source-agreements `
         --accept-package-agreements
-
+    
+    # Adicionar ao PATH da máquina (persistente)
+    $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+    if ($machinePath -notlike "*C:\Program Files\PowerShell\7*") {
+        [Environment]::SetEnvironmentVariable(
+            "Path",
+            "$machinePath;C:\Program Files\PowerShell\7",
+            "Machine"
+        )
+    }
+    
+    # Também adicionar à sessão atual
     $env:Path += ";C:\Program Files\PowerShell\7"
 }
 
