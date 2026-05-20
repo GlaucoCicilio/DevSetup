@@ -1,5 +1,5 @@
 # helpers.ps1
-# 2026-05-19
+# 2026-05-20
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
@@ -25,7 +25,6 @@ function Initialize-Directories {
     }
 }
 
-# Em helpers.ps1, melhorar Add-ToPath
 function Add-ToPath {
     param([string]$PathToAdd)
 
@@ -44,15 +43,13 @@ function Add-ToPath {
             "Machine"
         )
         Log "PATH atualizado: $PathToAdd"
-        return $true
     }
-    
-    return $true
-}
 
     if ($env:Path -notlike "*$PathToAdd*") {
         $env:Path += ";$PathToAdd"
     }
+    
+    return $true
 }
 
 function Invoke-WinGetInstall {
@@ -89,3 +86,4 @@ function Invoke-WinGetInstall {
         throw "Falha ao instalar pacote: $Id"
     }
 }
+
