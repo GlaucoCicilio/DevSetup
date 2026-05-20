@@ -8,6 +8,7 @@ function Ensure-MSYS2 {
 
     if (Test-Path "C:\msys64") {
         Log "MSYS2 já instalado"
+        return
     }
     else {
         Invoke-WinGetInstall -Id "MSYS2.MSYS2"
