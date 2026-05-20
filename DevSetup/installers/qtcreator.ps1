@@ -1,5 +1,5 @@
 # qtcreator.ps1
-# 2026-05-19
+# 2026-05-20
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
@@ -11,8 +11,16 @@ function Ensure-QtCreator {
         return
     }
 
-    Invoke-WinGetInstall -Id "QtProject.QtCreator"
-
-
-    Mark-Installed "qtcreator"
+    Log "Tentando instalar Qt Creator via WinGet..."
+    
+    try {
+        Invoke-WinGetInstall -Id "QtProject.QtCreator" -ErrorAction Stop
+        Mark-Installed "qtcreator"
+        Log "Qt Creator instalado com sucesso"
+    }
+    catch {
+        Log-Warn "Não foi possível instalar Qt Creator via WinGet: $_"
+        Log-Warn "Qt Creator é opcional e pode ser instalado manualmente de: https://www.qt.io/download-open-source"
+        # Não bloqueia a instalação - Qt Creator é opcional
+    }
 }
