@@ -1,5 +1,5 @@
 # setup.ps1
-# 2026-05-19
+# 2026-05-20
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
@@ -16,6 +16,11 @@ if ($PSVersionTable.PSVersion.Major -lt 7) {
 . .\core\downloads.ps1
 . .\core\state.ps1
 . .\core\validation.ps1
+
+# Garantir diretório de log existe ANTES de usar Log()
+if (!(Test-Path $Global:LogRoot)) {
+    New-Item -ItemType Directory -Path $Global:LogRoot -Force | Out-Null
+}
 
 # Installers
 . .\installers\git.ps1
