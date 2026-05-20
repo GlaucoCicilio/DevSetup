@@ -25,25 +25,30 @@ function Initialize-Directories {
     }
 }
 
+# Em helpers.ps1, melhorar Add-ToPath
 function Add-ToPath {
     param([string]$PathToAdd)
 
+    # Verificar se path existe
     if (!(Test-Path $PathToAdd)) {
-        Log-Warn "PATH inválido: $PathToAdd"
-        return
+        Log-Warn "PATH não encontrado, pulando: $PathToAdd"
+        return $false
     }
 
     $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
-
+    
     if ($machinePath -notlike "*$PathToAdd*") {
         [Environment]::SetEnvironmentVariable(
             "Path",
             "$machinePath;$PathToAdd",
             "Machine"
         )
-
         Log "PATH atualizado: $PathToAdd"
+        return $true
     }
+    
+    return $true
+}
 
     if ($env:Path -notlike "*$PathToAdd*") {
         $env:Path += ";$PathToAdd"
