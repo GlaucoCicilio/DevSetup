@@ -38,21 +38,16 @@ function Install-DefaultLibraries {
         Log "Instalando biblioteca: $lib"
         
         try {
-            # Usar sintaxe segura: não interpolação direta, usar argumentos separados
-            $arguments = @("install", "$lib`:`:`x64-windows")
+            # Executar instalação com triplet correto
+            $installSpec = "$lib`:x64-windows"
+            Log "Executando: vcpkg install $installSpec"
             
-            Log-Debug "Executando: vcpkg install $lib`:x64-windows"
-            
-            $process = & "$Global:VcpkgRoot\vcpkg.exe" install "$lib`:x64-windows" 2>&1
-            
-            # Verificar se houve sucesso procurando por mensagens de erro
-            $output = $process | Out-String
-            if ($output -match "error:|ERROR") {
-                Log-Warn "Aviso ao instalar $lib (pode estar parcialmente instalado): verificar manualmente"
-                # Não adicionar à lista de falhados se apenas avisos
-            } else {
-                Log "Biblioteca instalada com sucesso: $lib"
+            & "$Global:VcpkgRoot\vcpkg.exe" install $installSpec 2>&1 | ForEach-Object {
+                # Log cada linha da saída do vcpkg
+                Write-Host $_
             }
+            
+            Log "Biblioteca instalada com sucesso: $lib"
         }
         catch {
             Log-Error "Falha ao instalar: $lib - $_"
