@@ -1,5 +1,5 @@
 # visualstudio.ps1
-# 2026-05-19
+# 2026-05-20
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
