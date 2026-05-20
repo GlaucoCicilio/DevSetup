@@ -1,0 +1,41 @@
+{
+    "C_Cpp.default.cppStandard": "c++23",
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.compilerPath": "cl.exe",
+    "C_Cpp.default.intelliSenseEngine": "tag",
+    "C_Cpp.default.browse.path": [
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/src",
+        "D:/DevSetup/vcpkg/installed/x64-windows/include"
+    ],
+    "C_Cpp.formatting": "clangFormat",
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools",
+        "editor.formatOnSave": true,
+        "editor.rulers": [80, 120]
+    },
+    "[c]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools",
+        "editor.formatOnSave": true
+    },
+    "editor.wordWrap": "on",
+    "editor.fontSize": 12,
+    "editor.fontFamily": "Consolas, 'Courier New', monospace",
+    "files.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/build": false
+    },
+    "search.exclude": {
+        "**/build": true,
+        "**/vcpkg_installed": true
+    },
+    "cmake.configureOnOpen": true,
+    "cmake.generator": "Ninja",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.clangTidy.checks": "readability-*,modernize-*",
+    "C_Cpp.inlayHints.parameterNames.suppressCommentsInlineComment": true,
+    "C_Cpp.inlayHints.parameterNames.enabled": true
+}
